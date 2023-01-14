@@ -1,23 +1,42 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { db } from './firebase-config';
+import { getDocs, doc, collection, data, id } from 'firebase/firestore';
+import { useEffect } from 'react';
+// import { async } from '@firebase/util';
 
 function App() {
+
+  let dataRef = collection(db, "users");
+  // console.log(dataRef)
+
+  function handleUser(data) {
+    console.log("hey user");
+    console.log(data)
+  }
+
+  useEffect(() => {
+    async function handleInfo() {
+      let d = await getDocs(dataRef);
+      // console.log(d)
+      d.forEach((dc) => {
+        console.log(dc.id, "=>", dc.data());
+      })
+
+    }
+    console.log("QQQQQQ")
+    handleInfo()
+  }, []);
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='input'>
+
+        <label>Wrtie something &nbsp;&nbsp;</label>
+        <input placeholder='write here' type='text' onChange={(e) => { handleUser(e.target.value) }}></input>
+        <button >add data</button>
+      </div>
     </div>
   );
 }
